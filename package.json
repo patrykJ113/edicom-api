@@ -10,13 +10,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.13",
     "@types/node": "^22.5.5",
+    "jest": "^29.7.0",
     "prisma": "^5.19.1",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
   },
   "dependencies": {
     "@types/express": "^4.17.21",
+    "edicom-api": "file:",
     "express": "^4.21.0",
     "nodemon": "^3.1.7"
   }
