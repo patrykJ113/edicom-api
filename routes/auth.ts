@@ -1,6 +1,7 @@
 import express from 'express'
 import { PrismaClient } from '@prisma/client'
 import { isValidPassword, isValidEmail } from '../utils/auth/validate'
+import bcrypt from 'bcrypt'
 
 const router = express.Router()
 const prisma = new PrismaClient()
@@ -14,8 +15,10 @@ router.post('/register', async (req, res) => {
 
 	try {
 		if (isValidEmail(email) && isValidPassword(password)) {
+			const hashedPassword = await bcrypt.hash(password, 10)
+
 			await prisma.user.create({
-				data: { email, password },
+				data: { email, password: hashedPassword },
 			})
 			res.status(201).json({ message: 'User registered successfully' })
 		} else {
