@@ -1,9 +1,24 @@
 import express from 'express'
+import cors from 'cors'
+import authRouter from './routes/auth'
 
-const app = express();
+const app = express()
+
+app.use(express.json())
+app.use(
+	cors({
+		origin: 'http://localhost:3001',
+	})
+)
 
 app.get('/', (req, res) => {
-    res.send('hello')
+	res.send('hello')
+})
+
+app.use('/auth', authRouter)
+
+app.use((req, res) => {
+	res.status(404).json({ message: 'Not Found' })
 })
 
 app.listen(3000)
