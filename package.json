@@ -19,6 +19,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "@prisma/client": "^5.19.1",
     "@types/express": "^4.17.21",
     "edicom-api": "file:",
     "express": "^4.21.0",
