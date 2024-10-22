@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 app.use(
 	cors({
-		origin: 'http://localhost:3001',
+		origin: 'http://localhost:3000',
 	})
 )
 
@@ -21,4 +21,4 @@ app.use((req, res) => {
 	res.status(404).json({ message: 'Not Found' })
 })
 
-app.listen(3000)
+app.listen(4000)
