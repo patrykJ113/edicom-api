@@ -30,12 +30,12 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
 	try {
-		const { email, password } = req.body
-		if (isValidEmail(email) && isValidPassword(password)) {
+		const { email, password, name } = req.body
+		if (isValidEmail(email) && isValidPassword(password) && name !== '') {
 			const hashedPassword = await bcrypt.hash(password, 10)
 
 			await prisma.user.create({
-				data: { email, password: hashedPassword },
+				data: { email, password: hashedPassword, name },
 			})
 			return res.status(201).json({ message: 'User registered successfully' })
 		} else {
