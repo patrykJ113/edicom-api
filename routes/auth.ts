@@ -33,7 +33,6 @@ router.post('/register', async (req, res) => {
 		const { email, password, name } = req.body
 		if (isValidEmail(email) && isValidPassword(password) && name !== '') {
 			const hashedPassword = await bcrypt.hash(password, 10)
-
 			await prisma.user.create({
 				data: { email, password: hashedPassword, name },
 			})
@@ -41,7 +40,7 @@ router.post('/register', async (req, res) => {
 		} else {
 			return res.status(400).json({
 				error:
-					'Invalid credentials: Password or email does not meet requirements.',
+					'Invalid credentials: Password, email or name does not meet requirements.',
 			})
 		}
 	} catch (error) {
