@@ -46,7 +46,7 @@ router.post('/register', async (req, res) => {
 	} catch (error) {
 		return res
 			.status(500)
-			.json({ error: 'Something went wrong when creating a user' })
+			.json({ error: 'Something went wrong when creating a user on our side' })
 	}
 })
 
