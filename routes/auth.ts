@@ -21,10 +21,12 @@ router.post('/login', async (req, res) => {
 		if (isMatch) {
 			return res.status(200).json({ message: 'Login successful' })
 		} else {
-			return res.status(400).json({ message: 'Invalid credentials' })
+			return res.status(400).json({ error: 'Invalid credentials' })
 		}
 	} catch (err) {
-		return res.status(400).json({ message: 'Invalid credentials' })
+		return res
+			.status(400)
+			.json({ error: 'Something went wrong when Login in on our side' })
 	}
 })
 
