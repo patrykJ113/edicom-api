@@ -1,12 +1,12 @@
-import express from 'express'
+import express, { Router, Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { isValidPassword, isValidEmail } from '../utils/auth/validate'
 import bcrypt from 'bcrypt'
 
-const router = express.Router()
+const router: Router = express.Router()
 const prisma = new PrismaClient()
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: Request, res: Response) => {
 	try {
 		const { email, password } = req.body
 
@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
 	}
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req: Request, res: Response) => {
 	try {
 		const { email, password, name } = req.body
 
