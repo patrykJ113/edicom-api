@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
-import { isValidPassword, isValidEmail } from '../utils/auth/validate'
+import { isValidPassword, isValidEmail } from '@utils/auth/validate'
 import bcrypt from 'bcrypt'
 
 const router: Router = express.Router()
