@@ -6,11 +6,12 @@
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
 		"skipLibCheck": true,
+		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
 			"@locales/*": ["./src/locales/*"],
 			"@utils/*": ["./src/utils/*"],
-			"@routes/*": ["./src/routes/*"],
+			"@routes/*": ["./src/routes/*"]
 		}
 	},
 	"exclude": ["node_modules"]

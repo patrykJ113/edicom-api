@@ -1,32 +1,38 @@
 {
-  "name": "edicom-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon server.ts"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/cors": "^2.8.17",
-    "@types/jest": "^29.5.13",
-    "@types/node": "^22.5.5",
-    "jest": "^29.7.0",
-    "prisma": "^5.19.1",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.6.2"
-  },
-  "dependencies": {
-    "@prisma/client": "^5.19.1",
-    "@types/express": "^4.17.21",
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "edicom-api": "file:",
-    "express": "^4.21.0",
-    "nodemon": "^3.1.7"
-  }
+	"name": "edicom-api",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "nodemon -r tsconfig-paths/register src/server.ts"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/bcrypt": "^5.0.2",
+		"@types/cors": "^2.8.17",
+		"@types/express": "^4.17.21",
+		"@types/i18next": "^13.0.0",
+		"@types/i18next-express-middleware": "^1.7.0",
+		"@types/jest": "^29.5.13",
+		"@types/node": "^22.9.0",
+		"jest": "^29.7.0",
+		"prisma": "^5.19.1",
+		"ts-jest": "^29.2.5",
+		"ts-node": "^10.9.2",
+		"tsconfig-paths": "^4.2.0",
+		"typescript": "^5.6.2"
+	},
+	"dependencies": {
+		"@prisma/client": "^5.19.1",
+		"bcrypt": "^5.1.1",
+		"cors": "^2.8.5",
+		"edicom-api": "file:",
+		"express": "^4.21.0",
+		"i18next": "^23.16.4",
+		"i18next-express-middleware": "^2.0.0",
+		"i18next-fs-backend": "^2.3.2",
+		"nodemon": "^3.1.7"
+	}
 }
