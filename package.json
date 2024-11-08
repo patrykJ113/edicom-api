@@ -30,9 +30,9 @@
 		"cors": "^2.8.5",
 		"edicom-api": "file:",
 		"express": "^4.21.0",
-		"i18next": "^23.16.4",
-		"i18next-express-middleware": "^2.0.0",
+		"i18next": "^23.16.5",
 		"i18next-fs-backend": "^2.3.2",
+		"i18next-http-middleware": "^3.6.0",
 		"nodemon": "^3.1.7"
 	}
 }

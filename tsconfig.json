@@ -12,7 +12,7 @@
 			"@locales/*": ["./src/locales/*"],
 			"@utils/*": ["./src/utils/*"],
 			"@routes/*": ["./src/routes/*"]
-		}
+		},
 	},
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules"],
 }
