@@ -14,8 +14,9 @@ i18next
 		backend: {
 			loadPath: path.join(__dirname, '/locales/{{lng}}/{{ns}}.json'),
 		},
-		interpolation: {
-			escapeValue: false,
+		detection: {
+			order: ['querystring', 'header', 'cookie', 'session'],
+			lookupQuerystring: 'lang',
 		},
 		debug: true,
 	})

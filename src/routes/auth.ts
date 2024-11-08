@@ -5,11 +5,13 @@ import bcrypt from 'bcrypt'
 
 const router: Router = express.Router()
 const prisma = new PrismaClient()
-
 router.post('/login', async (req: Request, res: Response) => {
+	console.log('----------------------------');
+	console.log(req.headers['accept-language']);
+	console.log('----------------------------');
+	
 	try {
 		const { email, password } = req.body
-
 		const user = await prisma.user.findFirst({
 			where: {
 				email,
@@ -17,22 +19,18 @@ router.post('/login', async (req: Request, res: Response) => {
 		})
 
 		if (!user) {
-			return res
-				.status(404)
-				.json({ error: 'No account found with the provided email address' })
+			return res.status(404).json({ error: req.t('invalidCredentials') })
 		}
 
 		const isMatch = await bcrypt.compare(password, user.password)
 
 		if (isMatch) {
-			return res.status(200).json({ message: 'Login successful' })
+			return res.status(200).json({ message: req.t('loginSuccessful') })
 		} else {
-			return res.status(400).json({ error: 'Invalid credentials' })
+			return res.status(400).json({ error: req.t('invalidCredentials') })
 		}
 	} catch (err) {
-		return res
-			.status(400)
-			.json({ error: 'Something went wrong when Login in on our side' })
+		return res.status(400).json({ error: req.t('loginError') })
 	}
 })
 
@@ -42,16 +40,14 @@ router.post('/register', async (req: Request, res: Response) => {
 
 		if (!isValidEmail(email) || !isValidPassword(password) || !name) {
 			return res.status(400).json({
-				error:
-					'Invalid credentials: Password, email, or name does not meet requirements.',
+				error: req.t('inputsInvalid'),
 			})
 		}
 
 		const isEmailTaken = await prisma.user.findFirst({ where: { email } })
 		if (isEmailTaken) {
 			return res.status(409).json({
-				error:
-					"The email you've entered is already taken. Please enter a new email address or try logging in.",
+				error: req.t('emailIsTaken'),
 			})
 		}
 
@@ -61,12 +57,10 @@ router.post('/register', async (req: Request, res: Response) => {
 			data: { email, password: hashedPassword, name },
 		})
 
-		return res.status(201).json({ message: 'User registered successfully' })
+		return res.status(201).json({ message: req.t('registeredSuccessfully') })
 	} catch (error) {
 		console.error(error)
-		return res
-			.status(500)
-			.json({ error: 'Something went wrong when creating a user on our side' })
+		return res.status(500).json({ error: req.t('registerError') })
 	}
 })
 
