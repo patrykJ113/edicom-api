@@ -6,10 +6,6 @@ import bcrypt from 'bcrypt'
 const router: Router = express.Router()
 const prisma = new PrismaClient()
 router.post('/login', async (req: Request, res: Response) => {
-	console.log('----------------------------');
-	console.log(req.headers['accept-language']);
-	console.log('----------------------------');
-	
 	try {
 		const { email, password } = req.body
 		const user = await prisma.user.findFirst({
