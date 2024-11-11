@@ -25,7 +25,7 @@ router.post('/login', async (req: Request, res: Response) => {
 			return res.status(400).json({ error: req.t('invalidCredentials') })
 		}
 	} catch (err) {
-		return res.status(400).json({ error: req.t('loginError') })
+		return res.status(500).json({ error: req.t('loginError') })
 	}
 })
 
