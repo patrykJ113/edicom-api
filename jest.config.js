@@ -1,6 +1,7 @@
 /** @type {import('jest').Config} */
 
 const config = {
+	clearMocks: true,
 	testEnvironment: 'node',
 	preset: 'ts-jest',
 	testEnvironment: 'node',
@@ -8,6 +9,7 @@ const config = {
 	moduleNameMapper: {
 		'^@/(.*)$': '<rootDir>/src/$1',
 		'^@utils/(.*)$': '<rootDir>/src/utils/$1',
+		'^@routes/(.*)$': '<rootDir>/src/routes/$1',
 	},
 }
 
