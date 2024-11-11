@@ -26,6 +26,7 @@
 	},
 	"dependencies": {
 		"@prisma/client": "^5.19.1",
+		"@types/supertest": "^6.0.2",
 		"bcrypt": "^5.1.1",
 		"cors": "^2.8.5",
 		"edicom-api": "file:",
@@ -33,6 +34,7 @@
 		"i18next": "^23.16.5",
 		"i18next-fs-backend": "^2.3.2",
 		"i18next-http-middleware": "^3.6.0",
-		"nodemon": "^3.1.7"
+		"nodemon": "^3.1.7",
+		"supertest": "^7.0.0"
 	}
 }
