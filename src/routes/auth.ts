@@ -1,7 +1,11 @@
 import express, { Router, Request, Response } from 'express'
-import { isValidPassword, isValidEmail } from '@utils/auth/validate'
 import prisma from '@root/client'
 import bcrypt from 'bcrypt'
+import {
+	isDataValid,
+	isEmailTaken,
+	addTokensToResponse,
+} from '@utils/auth/registerFunctions'
 
 const router: Router = express.Router()
 router.post('/login', async (req: Request, res: Response) => {
@@ -33,24 +37,17 @@ router.post('/register', async (req: Request, res: Response) => {
 	try {
 		const { email, password, name } = req.body
 
-		if (!isValidEmail(email) || !isValidPassword(password) || !name) {
-			return res.status(400).json({
-				error: req.t('inputsInvalid'),
-			})
-		}
+		isDataValid(req, res, email, password, name)
 
-		const isEmailTaken = await prisma.user.findFirst({ where: { email } })
-		if (isEmailTaken) {
-			return res.status(409).json({
-				error: req.t('emailIsTaken'),
-			})
-		}
+		await isEmailTaken(req, res, email)
 
 		const hashedPassword = await bcrypt.hash(password, 10)
 
-		await prisma.user.create({
+		const user = await prisma.user.create({
 			data: { email, password: hashedPassword, name },
 		})
+
+		addTokensToResponse(res, user)
 
 		return res.status(201).json({ message: req.t('registeredSuccessfully') })
 	} catch (error) {

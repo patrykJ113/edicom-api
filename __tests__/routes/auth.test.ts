@@ -3,7 +3,10 @@ import app from '@/app'
 import bcrypt from 'bcrypt'
 import { prismaMock } from '@root/singleton'
 import { Response } from 'supertest'
-import { error } from 'console'
+
+jest.mock('@utils/auth/token', () => ({
+	generateTokens: jest.fn(() => 'mocked.jwt.token'),
+}))
 
 const isInputInvalid = (response: Response) => {
 	expect(response.status).toBe(400)
@@ -80,7 +83,7 @@ describe('Auth Endpoints', () => {
 		})
 	})
 
-	describe.only('Post auth/register', () => {
+	describe('Post auth/register', () => {
 		const data = {
 			email: 'test@example.com',
 			password: 'password123W@',
@@ -88,6 +91,7 @@ describe('Auth Endpoints', () => {
 		}
 
 		it('should return 201 with a message for a successful registration', async () => {
+			process.env.ACCESS_TOKEN_SECRET = 'mocked-secret'
 			const hashedPassword = await bcrypt.hash(data.password, 10)
 
 			prismaMock.user.findFirst.mockResolvedValue(null)
@@ -100,7 +104,9 @@ describe('Auth Endpoints', () => {
 			const response = await request(app).post('/auth/register').send(data)
 
 			expect(response.status).toBe(201)
-			expect(response.body).toEqual({ message: 'User registered successfully' })
+			expect(response.body).toEqual({
+				message: 'User registered successfully',
+			})
 		})
 
 		it('should return 400 with error message when name is empty', async () => {
@@ -167,7 +173,7 @@ describe('Auth Endpoints', () => {
 				.post('/auth/register')
 				.send({
 					...data,
-				})	
+				})
 
 			expect(response.status).toBe(409)
 			expect(response.body).toEqual({
@@ -177,18 +183,22 @@ describe('Auth Endpoints', () => {
 		})
 
 		it('should execute the catch block and return status 500 with an error message', async () => {
+			const consoleErrorSpy = jest
+				.spyOn(console, 'error')
+				.mockImplementation(() => {})
+
 			prismaMock.user.findFirst.mockImplementation(() => {
 				throw new Error('Database error')
 			})
 
-			const response = await request(app)
-				.post('/auth/register')
-				.send(data)
+			const response = await request(app).post('/auth/register').send(data)
 
 			expect(response.status).toBe(500)
 			expect(response.body).toEqual({
 				error: 'Something went wrong when creating a user on our side',
 			})
+
+			consoleErrorSpy.mockRestore()
 		})
 	})
 })
