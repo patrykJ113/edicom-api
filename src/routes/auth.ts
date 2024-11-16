@@ -6,6 +6,7 @@ import {
 	isEmailTaken,
 	addTokensToResponse,
 } from '@utils/auth/registerFunctions'
+import { comparePassword } from '@utils/auth/loginFunctions'
 
 const router: Router = express.Router()
 router.post('/login', async (req: Request, res: Response) => {
@@ -21,13 +22,8 @@ router.post('/login', async (req: Request, res: Response) => {
 			return res.status(404).json({ error: req.t('invalidCredentials') })
 		}
 
-		const isMatch = await bcrypt.compare(password, user.password)
-
-		if (isMatch) {
-			return res.status(200).json({ message: req.t('loginSuccessful') })
-		} else {
-			return res.status(400).json({ error: req.t('invalidCredentials') })
-		}
+		await comparePassword(req, res, user, password)
+		
 	} catch (err) {
 		return res.status(500).json({ error: req.t('loginError') })
 	}
