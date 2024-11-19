@@ -1,7 +1,6 @@
 import { comparePassword } from '@utils/auth/loginFunctions'
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-import { error } from 'console'
 
 jest.mock('bcrypt', () => ({
 	compare: jest.fn(),

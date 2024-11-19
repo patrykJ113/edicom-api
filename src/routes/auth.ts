@@ -5,6 +5,7 @@ import {
 	isDataValid,
 	isEmailTaken,
 	addTokensToResponse,
+	handleRegisterErrors,
 } from '@utils/auth/registerFunctions'
 import { comparePassword } from '@utils/auth/loginFunctions'
 
@@ -23,7 +24,6 @@ router.post('/login', async (req: Request, res: Response) => {
 		}
 
 		await comparePassword(req, res, user, password)
-		
 	} catch (err) {
 		return res.status(500).json({ error: req.t('loginError') })
 	}
@@ -33,9 +33,9 @@ router.post('/register', async (req: Request, res: Response) => {
 	try {
 		const { email, password, name } = req.body
 
-		isDataValid(req, res, email, password, name)
+		isDataValid(req, email, password, name)
 
-		await isEmailTaken(req, res, email)
+		await isEmailTaken(req, email)
 
 		const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -43,12 +43,10 @@ router.post('/register', async (req: Request, res: Response) => {
 			data: { email, password: hashedPassword, name },
 		})
 
-		addTokensToResponse(res, user)
+		addTokensToResponse(req, res, user)
 
-		return res.status(201).json({ message: req.t('registeredSuccessfully') })
 	} catch (error) {
-		console.error(error)
-		return res.status(500).json({ error: req.t('registerError') })
+		handleRegisterErrors(req, res, error as Error)
 	}
 })
 

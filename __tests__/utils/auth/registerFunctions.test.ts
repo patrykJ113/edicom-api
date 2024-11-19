@@ -5,8 +5,12 @@ import {
 	isDataValid,
 	isEmailTaken,
 	addTokensToResponse,
+	handleRegisterErrors,
 } from '@utils/auth/registerFunctions'
 import { Request, Response } from 'express'
+import InvalidInputsError from '@errors/InvalidInputsError'
+import EmailIsTakenError from '@/errors/EmailIsTakenError'
+import { User } from '@prisma/client'
 
 jest.mock('@utils/auth/validate', () => ({
 	isValidEmail: jest.fn(),
@@ -34,30 +38,44 @@ const testInvalidInput = (email: boolean, password: boolean, name: string) => {
 	const reqTMock = req.t as unknown as jest.Mock
 
 	reqTMock.mockReturnValue('inputsInvalid')
-	isValidEmailMock.mockReturnValue(false)
-	isValidPasswordMock.mockReturnValue(true)
+	isValidEmailMock.mockReturnValue(email)
+	isValidPasswordMock.mockReturnValue(password)
 
-	isDataValid(req, res, 'email', 'password', 'name')
-
-	expect(res.status).toHaveBeenCalledWith(400)
-	expect(res.json).toHaveBeenCalledWith({ error: 'inputsInvalid' })
+	expect(() => isDataValid(req, 'email', 'password', name)).toThrow(
+		InvalidInputsError
+	)
 }
 
-describe('registerFunctions', () => {
+const testIfEmailIsTaken = async (user: User | null) => {
+	const reqTMock = req.t as unknown as jest.Mock
+	reqTMock.mockReturnValue('emailIsTaken')
+
+	prismaMock.user.findFirst.mockResolvedValue(user)
+
+	if (user) {
+		await expect(isEmailTaken(req, 'test@example.com')).rejects.toThrow(
+			EmailIsTakenError
+		)
+	} else {
+		await expect(isEmailTaken(req, 'test@example.com')).resolves.not.toThrow()
+	}
+}
+
+describe.only('registerFunctions', () => {
 	describe('isDataValid', () => {
-		it('should return 400 and error message if email is invalid', () => {
+		it('Should throw a InvalidInputsError if email is invalid', () => {
 			testInvalidInput(false, true, 'name')
 		})
 
-		it('should return 400 and error message if password is invalid', () => {
+		it('Should throw a InvalidInputsError if password is invalid', () => {
 			testInvalidInput(true, false, 'name')
 		})
 
-		it('should return 400 and error message if name is empty', () => {
+		it('Should throw a InvalidInputsError if name is empty', () => {
 			testInvalidInput(true, true, '')
 		})
 
-		it('should do nothing when inputs are correct', () => {
+		it('Should not throw Error when inputs are correct', () => {
 			const isValidEmailMock = isValidEmail as jest.Mock
 			const isValidPasswordMock = isValidPassword as jest.Mock
 			const reqTMock = req.t as unknown as jest.Mock
@@ -66,46 +84,32 @@ describe('registerFunctions', () => {
 			isValidEmailMock.mockReturnValue(true)
 			isValidPasswordMock.mockReturnValue(true)
 
-			isDataValid(req, res, 'email', 'password', 'name')
-
-			expect(res.status).not.toHaveBeenCalled()
-			expect(res.json).not.toHaveBeenCalled()
+			expect(() => isDataValid(req, 'email', 'password', 'name')).not.toThrow(
+				InvalidInputsError
+			)
 		})
 	})
 
 	describe('isEmailTaken', () => {
-		it('should return 409 status and a error message when email is taken', async () => {
-			const reqTMock = req.t as unknown as jest.Mock
-			reqTMock.mockReturnValue('emailIsTaken')
-
-			prismaMock.user.findFirst.mockResolvedValue({
+		it('Should throw EmailIsTakenError when email is taken', async () => {
+			await testIfEmailIsTaken({
 				email: 'test@example.com',
 				password: 'password123',
 				id: '123123123213',
 				name: 'name',
 			})
-
-			await isEmailTaken(req, res, 'test@example.com')
-
-			expect(res.status).toHaveBeenCalledWith(409)
-			expect(res.json).toHaveBeenCalledWith({ error: 'emailIsTaken' })
 		})
 
-		it('should do nothing when email is unique', async () => {
-			const reqTMock = req.t as unknown as jest.Mock
-			reqTMock.mockReturnValue('emailIsTaken')
-
-			prismaMock.user.findFirst.mockResolvedValue(null)
-
-			await isEmailTaken(req, res, 'test@example.com')
-
-			expect(res.status).not.toHaveBeenCalled()
-			expect(res.json).not.toHaveBeenCalled()
+		it('Should not throw Error when email is unique', async () => {
+			await testIfEmailIsTaken(null)
 		})
 	})
 
 	describe('addTokensToResponse', () => {
 		it('Access and refresh tokens are added', () => {
+			const reqTMock = req.t as unknown as jest.Mock
+			reqTMock.mockReturnValue('registeredSuccessfully')
+
 			const user = {
 				id: '123',
 				name: 'name',
@@ -113,7 +117,7 @@ describe('registerFunctions', () => {
 				password: 'password',
 			}
 
-			addTokensToResponse(res, user)
+			addTokensToResponse(req, res, user)
 
 			expect(generateTokens).toHaveBeenCalledWith(user)
 			expect(res.setHeader).toHaveBeenCalledWith(
@@ -125,6 +129,40 @@ describe('registerFunctions', () => {
 				secure: true,
 				sameSite: true,
 			})
+
+			expect(res.status).toHaveBeenCalledWith(201)
+			expect(res.json).toHaveBeenCalledWith({
+				message: 'registeredSuccessfully',
+			})
+		})
+	})
+
+	describe('handleRegisterErrors', () => {
+		it('Returns 400 status and a error message when the InvalidInputsError is thrown', () => {
+			const error = new InvalidInputsError('InvalidInputsError')
+			handleRegisterErrors(req, res, error)
+
+			expect(res.status).toHaveBeenCalledWith(400)
+			expect(res.json).toHaveBeenCalledWith({ error: 'InvalidInputsError' })
+		})
+
+		it('Returns 409 status and a error message when the EmailIsTakenError is thrown', () => {
+			const error = new EmailIsTakenError('EmailIsTakenError')
+			handleRegisterErrors(req, res, error)
+
+			expect(res.status).toHaveBeenCalledWith(409)
+			expect(res.json).toHaveBeenCalledWith({ error: 'EmailIsTakenError' })
+		})
+
+		it('Returns 500 status and a error message when a normal Error is thrown', () => {
+			const reqTMock = req.t as unknown as jest.Mock
+			reqTMock.mockReturnValue('ServerError')
+			
+			const error = new Error('ServerError')
+			handleRegisterErrors(req, res, error)
+
+			expect(res.status).toHaveBeenCalledWith(500)
+			expect(res.json).toHaveBeenCalledWith({ error: 'ServerError' })
 		})
 	})
 })

@@ -12,6 +12,7 @@ const config = {
 		'^@root/(.*)$': '<rootDir>/$1',
 		'^@utils/(.*)$': '<rootDir>/src/utils/$1',
 		'^@routes/(.*)$': '<rootDir>/src/routes/$1',
+		'^@errors/(.*)$': '<rootDir>/src/errors/$1',
 	},
 }
 

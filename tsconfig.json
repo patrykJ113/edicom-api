@@ -12,7 +12,8 @@
 			"@root/*": ["./*"],
 			"@locales/*": ["./src/locales/*"],
 			"@utils/*": ["./src/utils/*"],
-			"@routes/*": ["./src/routes/*"]
+			"@routes/*": ["./src/routes/*"],
+			"@errors/*": ["./src/errors/*"]
 		},
 	},
 	"exclude": ["node_modules"],

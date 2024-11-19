@@ -3,32 +3,33 @@ import { Response, Request } from 'express'
 import prisma from '@root/client'
 import { generateTokens } from '@utils/auth/token'
 import { User } from '@prisma/client'
+import InvalidInputsError from '@errors/InvalidInputsError'
+import EmailIsTakenError from '@/errors/EmailIsTakenError'
 
 export const isDataValid = (
 	req: Request,
-	res: Response,
 	email: string,
 	password: string,
 	name: string
 ) => {
 	if (!isValidEmail(email) || !isValidPassword(password) || !name) {
-		return res.status(400).json({
-			error: req.t('inputsInvalid'),
-		})
+		throw new InvalidInputsError(req.t('inputsInvalid'))
 	}
 }
 
-export const isEmailTaken = async (req: Request, res: Response, email: string) => {
+export const isEmailTaken = async (req: Request, email: string) => {
 	const isEmailTaken = await prisma.user.findFirst({ where: { email } })
 
 	if (isEmailTaken) {
-		return res.status(409).json({
-			error: req.t('emailIsTaken'),
-		})
+		throw new EmailIsTakenError(req.t('emailIsTaken'))
 	}
 }
 
-export const addTokensToResponse = (res: Response, user: User) => {
+export const addTokensToResponse = (
+	req: Request,
+	res: Response,
+	user: User
+) => {
 	const [accessToken, refreshToken] = generateTokens(user)
 
 	res.setHeader('Authorization', `Bearer ${accessToken}`)
@@ -38,4 +39,20 @@ export const addTokensToResponse = (res: Response, user: User) => {
 		secure: true,
 		sameSite: true,
 	})
+
+	return res.status(201).json({ message: req.t('registeredSuccessfully') })
+}
+
+export const handleRegisterErrors = (req: Request, res: Response, error: Error) => {
+	if (error instanceof InvalidInputsError) {
+		return res.status(error.statusCode).json({
+			error: error.message,
+		})
+	} else if (error instanceof EmailIsTakenError) {
+		return res.status(error.statusCode).json({
+			error: error.message,
+		})
+	} else {
+		return res.status(500).json({ error: req.t('registerError') })
+	}
 }
