@@ -13,6 +13,7 @@ describe('generateToken', () => {
 
 	afterAll(() => {
 		delete process.env.ACCESS_TOKEN_SECRET
+		delete process.env.REFRESH_TOKEN_SECRET
 	})
 
 	const user = {
@@ -20,6 +21,7 @@ describe('generateToken', () => {
 		name: 'John Doe',
 		email: 'john.doe@example.com',
 		password: '',
+		refresh_token: ''
 	}
 
 	it('should return in a array a access and refresh token for a valid user', () => {
@@ -31,14 +33,26 @@ describe('generateToken', () => {
 		expect(access_token).toBe('mocked.jwt.token')
 		expect(refresh_token).toBe('mocked.jwt.token')
 
-		expect(jwt.sign).toHaveBeenCalledWith(
+		expect(jwt.sign).toHaveBeenNthCalledWith(
+			1,
 			{
 				sub: user.id,
 				name: user.name,
 				email: user.email,
 			},
 			process.env.ACCESS_TOKEN_SECRET,
-			{}
+			{ expiresIn: '5m' }
+		)
+
+		expect(jwt.sign).toHaveBeenNthCalledWith(
+			2,
+			{
+				sub: user.id,
+				name: user.name,
+				email: user.email,
+			},
+			process.env.REFRESH_TOKEN_SECRET,
+			{ expiresIn: '30d' }
 		)
 	})
 
