@@ -22,6 +22,7 @@ describe('Auth Endpoints', () => {
 			password: 'password123',
 			id: '123123123213',
 			name: 'name',
+			refresh_token: '',
 		}
 
 		it('should return 200 with a message for a successful login', async () => {
@@ -88,6 +89,7 @@ describe('Auth Endpoints', () => {
 			email: 'test@example.com',
 			password: 'password123W@',
 			name: 'name',
+			refresh_token: '',
 		}
 
 		it('should return 201 with a message for a successful registration', async () => {
@@ -99,6 +101,7 @@ describe('Auth Endpoints', () => {
 				...data,
 				id: 'as123asd123123',
 				password: hashedPassword,
+				refresh_token: '',
 			})
 
 			const response = await request(app).post('/auth/register').send(data)
