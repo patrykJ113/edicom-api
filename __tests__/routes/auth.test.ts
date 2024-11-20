@@ -5,7 +5,7 @@ import { prismaMock } from '@root/singleton'
 import { Response } from 'supertest'
 
 jest.mock('@utils/auth/token', () => ({
-	generateTokens: jest.fn(() => 'mocked.jwt.token'),
+	generateTokens: jest.fn(() => ['access', 'refresh']),
 }))
 
 const isInputInvalid = (response: Response) => {
@@ -89,6 +89,7 @@ describe('Auth Endpoints', () => {
 			email: 'test@example.com',
 			password: 'password123W@',
 			name: 'name',
+			id: 'as123asd123123',
 			refresh_token: '',
 		}
 
@@ -99,9 +100,13 @@ describe('Auth Endpoints', () => {
 			prismaMock.user.findFirst.mockResolvedValue(null)
 			prismaMock.user.create.mockResolvedValue({
 				...data,
-				id: 'as123asd123123',
 				password: hashedPassword,
 				refresh_token: '',
+			})
+
+			prismaMock.user.update.mockResolvedValue({
+				...data,
+				password: hashedPassword,
 			})
 
 			const response = await request(app).post('/auth/register').send(data)

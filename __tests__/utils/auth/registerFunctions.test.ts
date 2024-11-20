@@ -97,6 +97,7 @@ describe.only('registerFunctions', () => {
 				password: 'password123',
 				id: '123123123213',
 				name: 'name',
+				refresh_token: '',
 			})
 		})
 
@@ -115,6 +116,7 @@ describe.only('registerFunctions', () => {
 				name: 'name',
 				email: 'email',
 				password: 'password',
+				refresh_token: '',
 			}
 
 			addTokensToResponse(req, res, user)
@@ -157,7 +159,7 @@ describe.only('registerFunctions', () => {
 		it('Returns 500 status and a error message when a normal Error is thrown', () => {
 			const reqTMock = req.t as unknown as jest.Mock
 			reqTMock.mockReturnValue('ServerError')
-			
+
 			const error = new Error('ServerError')
 			handleRegisterErrors(req, res, error)
 

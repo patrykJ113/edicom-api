@@ -22,6 +22,7 @@ describe('loginFunctions', () => {
 			password: 'password123',
 			id: '123123123213',
 			name: 'name',
+			refresh_token: '',
 		}
 
 		it('should return 200 status plus message when password matches', async () => {
