@@ -5,7 +5,7 @@ import { prismaMock } from '@root/singleton'
 import { Response } from 'supertest'
 
 jest.mock('@utils/auth/token', () => ({
-	generateTokens: jest.fn(() => ['access', 'refresh']),
+	setTokens: jest.fn(),
 }))
 
 const isInputInvalid = (response: Response) => {
@@ -28,7 +28,7 @@ describe('Auth Endpoints', () => {
 		it('should return 200 with a message for a successful login', async () => {
 			const hashedPassword = await bcrypt.hash(data.password, 10)
 
-			prismaMock.user.findFirst.mockResolvedValue({
+			prismaMock.user.findFirstOrThrow.mockResolvedValue({
 				...data,
 				password: hashedPassword,
 			})
@@ -55,7 +55,7 @@ describe('Auth Endpoints', () => {
 		it('should return 400 with an error message for when the password is incorrect', async () => {
 			const hashedPassword = await bcrypt.hash('other password', 10)
 
-			prismaMock.user.findFirst.mockResolvedValue({
+			prismaMock.user.findFirstOrThrow.mockResolvedValue({
 				...data,
 				password: hashedPassword,
 			})
@@ -69,7 +69,7 @@ describe('Auth Endpoints', () => {
 		})
 
 		it('should execute the catch block and return status 500 with an error message', async () => {
-			prismaMock.user.findFirst.mockImplementation(() => {
+			prismaMock.user.findFirstOrThrow.mockImplementation(() => {
 				throw new Error('Database error')
 			})
 
