@@ -1,0 +1,7 @@
+{
+	"invalidCredentials": "Nieprawidłowe dane logowania",
+	"loginError": "Coś poszło nie tak podczas logowania po naszej stronie",
+	"inputsInvalid": "Hasło, e-mail lub nazwa nie spełniają wymagań",
+	"emailIsTaken": "Podany adres e-mail jest już zajęty. Proszę wprowadzić inny adres lub spróbować się zalogować",
+	"registerError": "Coś poszło nie tak podczas tworzenia użytkownika po naszej stronie"
+}
