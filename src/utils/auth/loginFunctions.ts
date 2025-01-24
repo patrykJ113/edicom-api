@@ -1,6 +1,6 @@
 import { Response, Request } from 'express'
 import { User } from '@prisma/client'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { setTokens } from '@utils/auth/token'
 
 export const comparePassword = async (req: Request, res: Response, user: User, password: string) => {

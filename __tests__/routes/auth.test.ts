@@ -1,6 +1,6 @@
 import request from 'supertest'
 import app from '@/app'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { prismaMock } from '@root/singleton'
 import { Response } from 'supertest'
 

@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express'
 import prisma from '@root/client'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { comparePassword } from '@utils/auth/loginFunctions'
 import jwt from 'jsonwebtoken'
 
