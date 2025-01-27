@@ -63,6 +63,7 @@ router.post('/refresh', async (req, res) => {
 		const user = await prisma.user.findFirstOrThrow({
 			where: {
 				id: (decoded as Payload).sub,
+				refresh_token: token
 			},
 		})
 
