@@ -10,6 +10,8 @@ import {
 import InvalidInputsError from '@errors/InvalidInputsError'
 import EmailIsTakenError from '@src/errors/EmailIsTakenError'
 import { User } from '@prisma/client'
+import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 jest.mock('@utils/auth/validate', () => ({
 	isValidEmail: jest.fn(),
@@ -142,6 +144,39 @@ describe.only('registerFunctions', () => {
 
 			expect(res.status).toHaveBeenCalledWith(409)
 			expect(res.json).toHaveBeenCalledWith({ error: 'EmailIsTakenError' })
+		})
+
+		it('returns 401 and a error message when the token has a invalid format', () => {
+			const jwtError = new JsonWebTokenError('')
+			handleRegisterErrors(req, res, jwtError)
+
+			expect(res.status).toHaveBeenCalledWith(401)
+			expect(res.json).toHaveBeenCalledWith({
+				error: 'Invalid or expired token',
+			})
+		})
+
+		it('returns 401 and a error message when the token is expired', () => {
+			const tokenExpiredError = new TokenExpiredError('', new Date())
+			handleRegisterErrors(req, res, tokenExpiredError)
+
+			expect(res.status).toHaveBeenCalledWith(401)
+			expect(res.json).toHaveBeenCalledWith({
+				error: 'Invalid or expired token',
+			})
+		})
+
+		it('returns 401 and a error message when the user is id or refresh token is not found in the db', () => {
+			const notFoundError = new PrismaClientKnownRequestError('', {
+				code: 'P2025',
+				clientVersion: '',
+			})
+
+			handleRegisterErrors(req, res, notFoundError)
+			expect(res.status).toHaveBeenCalledWith(401)
+			expect(res.json).toHaveBeenCalledWith({
+				error: 'User not found or token mismatch',
+			})
 		})
 
 		it('Returns 500 status and a error message when a normal Error is thrown', () => {

@@ -49,7 +49,6 @@ router.post('/register', async (req: Request, res: Response) => {
 
 		return res.status(201).json({ message: req.t('registeredSuccessfully') })
 	} catch (error) {
-		console.error(error)
 		handleRegisterErrors(req, res, error as Error)
 	}
 })
@@ -63,15 +62,15 @@ router.post('/refresh', async (req, res) => {
 		const user = await prisma.user.findFirstOrThrow({
 			where: {
 				id: (decoded as Payload).sub,
-				refresh_token: token
+				refresh_token: token,
 			},
 		})
 
 		await setTokens(res, user)
 
 		return res.status(200).send()
-	} catch (err) {
-		return res.redirect(302, '')
+	} catch (error) {
+		handleRegisterErrors(req, res, error as Error)
 	}
 })
 

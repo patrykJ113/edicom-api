@@ -5,6 +5,11 @@ import { generateTokens } from '@utils/auth/token'
 import { User } from '@prisma/client'
 import InvalidInputsError from '@errors/InvalidInputsError'
 import EmailIsTakenError from '@src/errors/EmailIsTakenError'
+import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
+
+interface PrismaError extends Error {
+	code?: string
+}
 
 export const isDataValid = (
 	req: Request,
@@ -43,7 +48,11 @@ export const addTokensToResponse = (
 	return res.status(201).json({ message: req.t('registeredSuccessfully') })
 }
 
-export const handleRegisterErrors = (req: Request, res: Response, error: Error) => {
+export const handleRegisterErrors = (
+	req: Request,
+	res: Response,
+	error: Error
+) => {
 	if (error instanceof InvalidInputsError) {
 		return res.status(error.statusCode).json({
 			error: error.message,
@@ -52,6 +61,13 @@ export const handleRegisterErrors = (req: Request, res: Response, error: Error) 
 		return res.status(error.statusCode).json({
 			error: error.message,
 		})
+	} else if (
+		error instanceof JsonWebTokenError ||
+		error instanceof TokenExpiredError
+	) {
+		return res.status(401).json({ error: 'Invalid or expired token' })
+	} else if ((error as PrismaError).code === 'P2025') {
+		return res.status(401).json({ error: 'User not found or token mismatch' })
 	} else {
 		return res.status(500).json({ error: req.t('registerError') })
 	}
