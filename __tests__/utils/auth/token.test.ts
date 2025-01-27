@@ -1,18 +1,10 @@
 import * as tokenFuncs from '@utils/auth/token'
 import jwt from 'jsonwebtoken'
-import { Response } from 'express'
 import { prismaMock } from '@/singleton'
 
 jest.mock('jsonwebtoken', () => ({
 	sign: jest.fn(() => 'mocked.jwt.token'),
 }))
-
-const res = {
-	status: jest.fn(() => res),
-	json: jest.fn(),
-	setHeader: jest.fn(),
-	cookie: jest.fn(),
-} as unknown as Response
 
 describe('Tokens', () => {
 	beforeAll(() => {

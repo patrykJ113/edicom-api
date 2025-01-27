@@ -8,17 +8,6 @@ jest.mock('bcryptjs', () => ({
 	compare: jest.fn(),
 }))
 
-const req = {
-	t: jest.fn(),
-} as unknown as Request
-
-const res = {
-	status: jest.fn(() => res),
-	json: jest.fn(),
-	setHeader: jest.fn(),
-	cookie: jest.fn(),
-} as unknown as Response
-
 describe('loginFunctions', () => {
 	describe('comparePassword', () => {
 		const user = {

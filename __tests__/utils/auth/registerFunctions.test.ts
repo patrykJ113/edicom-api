@@ -7,7 +7,6 @@ import {
 	addTokensToResponse,
 	handleRegisterErrors,
 } from '@utils/auth/registerFunctions'
-import { Request, Response } from 'express'
 import InvalidInputsError from '@errors/InvalidInputsError'
 import EmailIsTakenError from '@src/errors/EmailIsTakenError'
 import { User } from '@prisma/client'
@@ -20,17 +19,6 @@ jest.mock('@utils/auth/validate', () => ({
 jest.mock('@utils/auth/token', () => ({
 	generateTokens: jest.fn(() => ['access', 'refresh']),
 }))
-
-const req = {
-	t: jest.fn(),
-} as unknown as Request
-
-const res = {
-	status: jest.fn(() => res),
-	json: jest.fn(),
-	setHeader: jest.fn(),
-	cookie: jest.fn(),
-} as unknown as Response
 
 const testInvalidInput = (email: boolean, password: boolean, name: string) => {
 	const isValidEmailMock = isValidEmail as jest.Mock
