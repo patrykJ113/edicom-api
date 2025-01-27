@@ -6,7 +6,10 @@ const config = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
 	testMatch: ['**/__tests__/**/*.test.ts'],
-	setupFilesAfterEnv: ['<rootDir>/singleton.ts'],
+	setupFilesAfterEnv: [
+		'<rootDir>/singleton.ts',
+		'<rootDir>/setup/jest.setup.ts',
+	],
 	moduleNameMapper: {
 		'^@/(.*)$': '<rootDir>/src/$1',
 		'^@root/(.*)$': '<rootDir>/$1',
