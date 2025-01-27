@@ -13,8 +13,6 @@ const config = {
 	moduleNameMapper: {
 		'^@/(.*)$': '<rootDir>/$1',
 		'^@src/(.*)$': '<rootDir>/src/$1',
-		// '^@/(.*)$': '<rootDir>/src/$1',
-		// '^@root/(.*)$': '<rootDir>/$1',
 		'^@utils/(.*)$': '<rootDir>/src/utils/$1',
 		'^@routes/(.*)$': '<rootDir>/src/routes/$1',
 		'^@errors/(.*)$': '<rootDir>/src/errors/$1',
