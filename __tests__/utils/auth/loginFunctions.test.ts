@@ -2,7 +2,7 @@ import { comparePassword } from '@utils/auth/loginFunctions'
 import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import * as tokenFuncs from '@utils/auth/token'
-import { prismaMock } from '@root/singleton'
+import { prismaMock } from '@/singleton'
 
 jest.mock('bcryptjs', () => ({
 	compare: jest.fn(),

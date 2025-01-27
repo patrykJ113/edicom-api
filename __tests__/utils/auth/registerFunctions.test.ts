@@ -1,5 +1,5 @@
 import { isValidEmail, isValidPassword } from '@utils/auth/validate'
-import { prismaMock } from '@root/singleton'
+import { prismaMock } from '@/singleton'
 import { generateTokens } from '@utils/auth/token'
 import {
 	isDataValid,
@@ -9,7 +9,7 @@ import {
 } from '@utils/auth/registerFunctions'
 import { Request, Response } from 'express'
 import InvalidInputsError from '@errors/InvalidInputsError'
-import EmailIsTakenError from '@/errors/EmailIsTakenError'
+import EmailIsTakenError from '@src/errors/EmailIsTakenError'
 import { User } from '@prisma/client'
 
 jest.mock('@utils/auth/validate', () => ({

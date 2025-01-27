@@ -1,7 +1,7 @@
 import request from 'supertest'
-import app from '@/app'
+import app from '@src/app'
 import bcrypt from 'bcryptjs'
-import { prismaMock } from '@root/singleton'
+import { prismaMock } from '@/singleton'
 import { Response } from 'supertest'
 
 jest.mock('@utils/auth/token', () => ({

@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import authRouter from '@routes/auth'
-import i18next from '@/i18n'
+import i18next from '@src/i18n'
 import httpMiddleware from 'i18next-http-middleware'
 import cookieParser from 'cookie-parser'
 

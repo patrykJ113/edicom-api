@@ -8,8 +8,10 @@
 		"skipLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"],
-			"@root/*": ["./*"],
+			"@/*": ["./*"],
+			"@src/*": ["./src/*"],
+			// "@/*": ["./src/*"],
+			// "@root/*": ["./*"],
 			"@locales/*": ["./src/locales/*"],
 			"@utils/*": ["./src/utils/*"],
 			"@routes/*": ["./src/routes/*"],

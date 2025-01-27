@@ -1,7 +1,7 @@
 import * as tokenFuncs from '@utils/auth/token'
 import jwt from 'jsonwebtoken'
 import { Response } from 'express'
-import { prismaMock } from '@root/singleton'
+import { prismaMock } from '@/singleton'
 
 jest.mock('jsonwebtoken', () => ({
 	sign: jest.fn(() => 'mocked.jwt.token'),

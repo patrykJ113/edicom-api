@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { User } from '@prisma/client'
-import prisma from '@root/client'
+import prisma from '@/client'
 import { Response } from 'express'
 
 export type Payload = {
