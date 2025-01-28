@@ -13,7 +13,8 @@
 			"@locales/*": ["./src/locales/*"],
 			"@utils/*": ["./src/utils/*"],
 			"@routes/*": ["./src/routes/*"],
-			"@errors/*": ["./src/errors/*"]
+			"@errors/*": ["./src/errors/*"],
+			"@app-types": ["./src/app-types.ts"]
 		},
 	},
 	"exclude": ["node_modules"],
