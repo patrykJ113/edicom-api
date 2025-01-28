@@ -9,7 +9,9 @@ import {
 	isEmailTaken,
 	handleRegisterErrors,
 } from '@utils/auth/registerFunctions'
+import { handleRefreshErrors } from '@utils/auth/refreshFunctions'
 import { Payload, setTokens } from '@utils/auth/token'
+import { PrismaError } from '@app-types'
 
 const router: Router = express.Router()
 router.post('/login', async (req: Request, res: Response) => {
@@ -21,13 +23,13 @@ router.post('/login', async (req: Request, res: Response) => {
 			},
 		})
 
-		if (!user) {
-			return res.status(404).json({ error: req.t('invalidCredentials') })
-		}
-
 		await comparePassword(req, res, user, password)
 	} catch (err) {
-		return res.status(500).json({ error: req.t('loginError') })
+		if ((err as PrismaError).code === 'P2025') {
+			return res.status(401).json({ error: req.t('invalidCredentials') })
+		} else {
+			return res.status(500).json({ error: req.t('loginError') })
+		}
 	}
 })
 
@@ -70,7 +72,7 @@ router.post('/refresh', async (req, res) => {
 
 		return res.status(200).send()
 	} catch (error) {
-		handleRegisterErrors(req, res, error as Error)
+		handleRefreshErrors(res, error as Error)
 	}
 })
 

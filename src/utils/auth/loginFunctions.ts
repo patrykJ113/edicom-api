@@ -10,6 +10,6 @@ export const comparePassword = async (req: Request, res: Response, user: User, p
 		await setTokens(res, user)
 		return res.status(200).json({ message: req.t('loginSuccessful') })
 	} else {
-		return res.status(400).json({ error: req.t('invalidCredentials') })
+		return res.status(401).json({ error: req.t('invalidCredentials') })
 	}
 }

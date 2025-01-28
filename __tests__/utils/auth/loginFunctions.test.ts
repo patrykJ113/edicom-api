@@ -73,7 +73,7 @@ describe('loginFunctions', () => {
 
 			await comparePassword(req, res, user, 'password123')
 
-			expect(res.status).toHaveBeenCalledWith(400)
+			expect(res.status).toHaveBeenCalledWith(401)
 			expect(res.json).toHaveBeenCalledWith({
 				error: 'invalidCredentials',
 			})

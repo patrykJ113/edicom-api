@@ -27,24 +27,6 @@ export const isEmailTaken = async (req: Request, email: string) => {
 	}
 }
 
-export const addTokensToResponse = (
-	req: Request,
-	res: Response,
-	user: User
-) => {
-	const [accessToken, refreshToken] = generateTokens(user)
-
-	res.setHeader('Authorization', `Bearer ${accessToken}`)
-
-	res.cookie('refreshToken', refreshToken, {
-		httpOnly: true,
-		secure: true,
-		sameSite: true,
-	})
-
-	return res.status(201).json({ message: req.t('registeredSuccessfully') })
-}
-
 export const handleRegisterErrors = (
 	req: Request,
 	res: Response,
@@ -58,13 +40,6 @@ export const handleRegisterErrors = (
 		return res.status(error.statusCode).json({
 			error: error.message,
 		})
-	} else if (
-		error instanceof JsonWebTokenError ||
-		error instanceof TokenExpiredError
-	) {
-		return res.status(401).json({ error: 'Invalid or expired token' })
-	} else if ((error as PrismaError).code === 'P2025') {
-		return res.status(401).json({ error: 'User not found or token mismatch' })
 	} else {
 		return res.status(500).json({ error: req.t('registerError') })
 	}

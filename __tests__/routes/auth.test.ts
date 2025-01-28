@@ -57,17 +57,22 @@ describe('Auth Endpoints', () => {
 		})
 
 		it("should return 404 with an error message for when the user doesn't exist", async () => {
-			prismaMock.user.findFirst.mockResolvedValue(null)
+			prismaMock.user.findFirstOrThrow.mockRejectedValue(
+				new Prisma.PrismaClientKnownRequestError('No User found', {
+					code: 'P2025',
+					clientVersion: '',
+				})
+			)
 
 			const response = await request(app)
 				.post('/auth/login')
 				.send({ email: data.email, password: data.password })
 
-			expect(response.status).toBe(404)
+			expect(response.status).toBe(401)
 			expect(response.body).toEqual({ error: 'Invalid credentials' })
 		})
 
-		it('should return 400 with an error message for when the password is incorrect', async () => {
+		it('should return 401 with an error message for when the password is incorrect', async () => {
 			const hashedPassword = await bcrypt.hash('other password', 10)
 
 			prismaMock.user.findFirstOrThrow.mockResolvedValue({
@@ -79,7 +84,7 @@ describe('Auth Endpoints', () => {
 				.post('/auth/login')
 				.send({ email: data.email, password: data.password })
 
-			expect(response.status).toBe(400)
+			expect(response.status).toBe(401)
 			expect(response.body).toEqual({ error: 'Invalid credentials' })
 		})
 

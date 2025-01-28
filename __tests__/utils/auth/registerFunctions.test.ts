@@ -1,17 +1,13 @@
 import { isValidEmail, isValidPassword } from '@utils/auth/validate'
 import { prismaMock } from '@/singleton'
-import { generateTokens } from '@utils/auth/token'
 import {
 	isDataValid,
 	isEmailTaken,
-	addTokensToResponse,
 	handleRegisterErrors,
 } from '@utils/auth/registerFunctions'
 import InvalidInputsError from '@errors/InvalidInputsError'
 import EmailIsTakenError from '@src/errors/EmailIsTakenError'
 import { User } from '@prisma/client'
-import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 jest.mock('@utils/auth/validate', () => ({
 	isValidEmail: jest.fn(),
@@ -96,39 +92,6 @@ describe.only('registerFunctions', () => {
 		})
 	})
 
-	describe('addTokensToResponse', () => {
-		it('Access and refresh tokens are added', () => {
-			const reqTMock = req.t as unknown as jest.Mock
-			reqTMock.mockReturnValue('registeredSuccessfully')
-
-			const user = {
-				id: '123',
-				name: 'name',
-				email: 'email',
-				password: 'password',
-				refresh_token: '',
-			}
-
-			addTokensToResponse(req, res, user)
-
-			expect(generateTokens).toHaveBeenCalledWith(user)
-			expect(res.setHeader).toHaveBeenCalledWith(
-				'Authorization',
-				'Bearer access'
-			)
-			expect(res.cookie).toHaveBeenCalledWith('refreshToken', 'refresh', {
-				httpOnly: true,
-				secure: true,
-				sameSite: true,
-			})
-
-			expect(res.status).toHaveBeenCalledWith(201)
-			expect(res.json).toHaveBeenCalledWith({
-				message: 'registeredSuccessfully',
-			})
-		})
-	})
-
 	describe('handleRegisterErrors', () => {
 		it('Returns 400 status and a error message when the InvalidInputsError is thrown', () => {
 			const error = new InvalidInputsError('InvalidInputsError')
@@ -144,39 +107,6 @@ describe.only('registerFunctions', () => {
 
 			expect(res.status).toHaveBeenCalledWith(409)
 			expect(res.json).toHaveBeenCalledWith({ error: 'EmailIsTakenError' })
-		})
-
-		it('returns 401 and a error message when the token has a invalid format', () => {
-			const jwtError = new JsonWebTokenError('')
-			handleRegisterErrors(req, res, jwtError)
-
-			expect(res.status).toHaveBeenCalledWith(401)
-			expect(res.json).toHaveBeenCalledWith({
-				error: 'Invalid or expired token',
-			})
-		})
-
-		it('returns 401 and a error message when the token is expired', () => {
-			const tokenExpiredError = new TokenExpiredError('', new Date())
-			handleRegisterErrors(req, res, tokenExpiredError)
-
-			expect(res.status).toHaveBeenCalledWith(401)
-			expect(res.json).toHaveBeenCalledWith({
-				error: 'Invalid or expired token',
-			})
-		})
-
-		it('returns 401 and a error message when the user is id or refresh token is not found in the db', () => {
-			const notFoundError = new PrismaClientKnownRequestError('', {
-				code: 'P2025',
-				clientVersion: '',
-			})
-
-			handleRegisterErrors(req, res, notFoundError)
-			expect(res.status).toHaveBeenCalledWith(401)
-			expect(res.json).toHaveBeenCalledWith({
-				error: 'User not found or token mismatch',
-			})
 		})
 
 		it('Returns 500 status and a error message when a normal Error is thrown', () => {
