@@ -17,6 +17,7 @@ const config = {
 		'^@routes/(.*)$': '<rootDir>/src/routes/$1',
 		'^@errors/(.*)$': '<rootDir>/src/errors/$1',
 		'^@app-types$': '<rootDir>/src/app-types.ts',
+		'^@middleware/(.*)$': ['<rootDir>/src/middleware/$1'],
 	},
 }
 
