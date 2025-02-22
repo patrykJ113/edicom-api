@@ -4,6 +4,7 @@
 		"module": "commonjs",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
+		"types": ["node", "./src/types/express.d.ts", "./src/types/global.d.ts"],
 		"strict": true,
 		"skipLibCheck": true,
 		"baseUrl": ".",
@@ -14,8 +15,9 @@
 			"@utils/*": ["./src/utils/*"],
 			"@routes/*": ["./src/routes/*"],
 			"@errors/*": ["./src/errors/*"],
-			"@app-types": ["./src/app-types.ts"]
-		},
+			"@app-types": ["./src/app-types.ts"],
+			"@middleware/*": ["./src/middleware/*"]
+		}
 	},
 	"exclude": ["node_modules"],
 }
