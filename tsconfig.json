@@ -4,6 +4,7 @@
 		"module": "commonjs",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
+		"types": ["node", "./src/types/express.d.ts", "./src/types/global.d.ts"],
 		"strict": true,
 		"skipLibCheck": true,
 		"baseUrl": ".",
