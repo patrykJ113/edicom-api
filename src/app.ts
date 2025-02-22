@@ -4,6 +4,8 @@ import authRouter from '@routes/auth'
 import i18next from '@src/i18n'
 import httpMiddleware from 'i18next-http-middleware'
 import cookieParser from 'cookie-parser'
+import { accessTokenMiddleware } from '@middleware/accessTokenMiddleware'
+import { refreshTokenMiddleware } from '@middleware/refreshTokenMiddleware'
 
 const app = express()
 
@@ -18,7 +20,7 @@ app.use(
 app.use(cookieParser())
 app.use(httpMiddleware.handle(i18next))
 
-app.get('/', (req, res) => {
+app.get('/', accessTokenMiddleware, refreshTokenMiddleware, (req, res) => {
 	res.send('hello')
 })
 
