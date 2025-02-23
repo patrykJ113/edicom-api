@@ -18,7 +18,7 @@ i18next
 			order: ['querystring', 'header', 'cookie', 'session'],
 			lookupQuerystring: 'lang',
 		},
-		debug: true,
+		debug: false,
 	})
 
 export default i18next
