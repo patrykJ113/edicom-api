@@ -6,7 +6,9 @@ import { Response } from 'express'
 export type Payload = {
 	sub: string
 	name: string
-	email: string
+	email: string,
+	iat?: number,
+	exp?: number
 }
 
 export function generateTokens(user: User): string[] {
