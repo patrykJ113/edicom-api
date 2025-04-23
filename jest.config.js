@@ -8,7 +8,7 @@ const config = {
 	testMatch: ['**/__tests__/**/*.test.ts'],
 	setupFilesAfterEnv: [
 		'<rootDir>/singleton.ts',
-		'<rootDir>/setup/jest.setup.ts',
+		'<rootDir>/jest.setup.ts',
 	],
 	moduleNameMapper: {
 		'^@/(.*)$': '<rootDir>/$1',

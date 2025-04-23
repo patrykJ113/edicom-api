@@ -21,7 +21,7 @@ app.use(cookieParser())
 app.use(httpMiddleware.handle(i18next))
 
 app.get('/', accessTokenMiddleware, refreshTokenMiddleware, (req, res) => {
-	res.send('hello')
+	res.send('Test: IT works !!!')
 })
 
 app.use('/auth', authRouter)
