@@ -11,7 +11,7 @@ import {
 } from '@utils/auth/registerFunctions'
 import { handleRefreshErrors } from '@utils/auth/refreshFunctions'
 import { Payload, setTokens } from '@utils/auth/token'
-import { PrismaError } from '@app-types'
+import { PrismaError } from '@/src/types/prismaError'
 
 const router: Router = express.Router()
 router.post('/login', async (req: Request, res: Response) => {

@@ -6,7 +6,7 @@ import { User } from '@prisma/client'
 import InvalidInputsError from '@errors/InvalidInputsError'
 import EmailIsTakenError from '@src/errors/EmailIsTakenError'
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
-import { PrismaError } from '@app-types'
+import { PrismaError } from '@/src/types/prismaError'
 
 export const isDataValid = (
 	req: Request,

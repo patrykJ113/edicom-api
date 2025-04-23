@@ -1,12 +1,8 @@
 import { Response } from 'express'
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
-import { PrismaError } from '@app-types'
+import { PrismaError } from '@/src/types/prismaError'
 
-
-export const handleRefreshErrors = (
-	res: Response,
-	error: Error
-) => {
+export const handleRefreshErrors = (res: Response, error: Error) => {
 	if (
 		error instanceof JsonWebTokenError ||
 		error instanceof TokenExpiredError
