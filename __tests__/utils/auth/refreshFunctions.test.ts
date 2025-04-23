@@ -1,4 +1,4 @@
-import { handleRefreshErrors } from '@utils/auth/refreshFunctions'
+import { handleRefreshErrors } from '@helpers/refreshFunctions'
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 

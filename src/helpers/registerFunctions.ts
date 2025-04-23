@@ -1,12 +1,8 @@
-import { isValidEmail, isValidPassword } from '@utils/auth/validate'
+import { isValidEmail, isValidPassword } from '@/src/utils/validate'
 import { Response, Request } from 'express'
 import prisma from '@/client'
-import { generateTokens } from '@utils/auth/token'
-import { User } from '@prisma/client'
 import InvalidInputsError from '@errors/InvalidInputsError'
-import EmailIsTakenError from '@src/errors/EmailIsTakenError'
-import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
-import { PrismaError } from '@/src/types/prismaError'
+import EmailIsTakenError from '@errors/EmailIsTakenError'
 
 export const isDataValid = (
 	req: Request,

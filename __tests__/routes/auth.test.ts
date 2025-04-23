@@ -5,7 +5,7 @@ import { prismaMock } from '@/singleton'
 import { Response } from 'supertest'
 import { Prisma } from '@prisma/client'
 import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
-import { setTokens } from '@utils/auth/token'
+import { setTokens } from '@helpers/token'
 
 jest.mock('@utils/auth/token', () => ({
 	setTokens: jest.fn(),

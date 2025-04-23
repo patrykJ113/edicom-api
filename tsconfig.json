@@ -20,8 +20,8 @@
 			"@utils/*": ["./src/utils/*"],
 			"@routes/*": ["./src/routes/*"],
 			"@errors/*": ["./src/errors/*"],
-			"@app-types": ["src/types/prismaError.ts"],
-			"@middleware/*": ["./src/middleware/*"]
+			"@middleware/*": ["./src/middleware/*"],
+			"@helpers/*": ["./src/helpers/*"]
 		}
 	},
 	"exclude": ["node_modules"]

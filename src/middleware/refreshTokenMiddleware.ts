@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import prisma from '@/client'
-import { Payload, setTokens } from '@utils/auth/token'
+import { Payload, setTokens } from '@helpers/token'
 
 export const refreshTokenMiddleware = async (
 	req: Request,
@@ -12,7 +12,7 @@ export const refreshTokenMiddleware = async (
 		if (req.hasValidAccessToken) {
 			return next()
 		}
-		
+
 		const refreshToken = req.cookies['refreshToken']
 		const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string
 		const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string

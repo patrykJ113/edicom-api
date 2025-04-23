@@ -1,4 +1,4 @@
-import { isValidPassword, isValidEmail } from '@utils/auth/validate'
+import { isValidPassword, isValidEmail } from '@/src/utils/validate'
 
 describe('Validate functions', () => {
 	it('isValidPassword returns true if password is correct and false if not', () => {

@@ -1,16 +1,16 @@
 import express, { Router, Request, Response } from 'express'
 import prisma from '@/client'
 import bcrypt from 'bcryptjs'
-import { comparePassword } from '@utils/auth/loginFunctions'
+import { comparePassword } from '@helpers/loginFunctions'
 import jwt from 'jsonwebtoken'
 
 import {
 	isDataValid,
 	isEmailTaken,
 	handleRegisterErrors,
-} from '@utils/auth/registerFunctions'
-import { handleRefreshErrors } from '@utils/auth/refreshFunctions'
-import { Payload, setTokens } from '@utils/auth/token'
+} from '@helpers/registerFunctions'
+import { handleRefreshErrors } from '@helpers/refreshFunctions'
+import { Payload, setTokens } from '@helpers/token'
 import { PrismaError } from '@/src/types/prismaError'
 
 const router: Router = express.Router()

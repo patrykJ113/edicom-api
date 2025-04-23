@@ -1,10 +1,10 @@
-import { isValidEmail, isValidPassword } from '@utils/auth/validate'
+import { isValidEmail, isValidPassword } from '@/src/utils/validate'
 import { prismaMock } from '@/singleton'
 import {
 	isDataValid,
 	isEmailTaken,
 	handleRegisterErrors,
-} from '@utils/auth/registerFunctions'
+} from '@helpers/registerFunctions'
 import InvalidInputsError from '@errors/InvalidInputsError'
 import EmailIsTakenError from '@src/errors/EmailIsTakenError'
 import { User } from '@prisma/client'

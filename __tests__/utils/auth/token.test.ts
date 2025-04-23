@@ -1,4 +1,4 @@
-import * as tokenFuncs from '@utils/auth/token'
+import * as tokenFuncs from '@helpers/token'
 import jwt from 'jsonwebtoken'
 import { prismaMock } from '@/singleton'
 
