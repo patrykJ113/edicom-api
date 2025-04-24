@@ -140,4 +140,52 @@ router.post('/verify', async (req, res) => {
 	}
 })
 
+router.post('/logout', async (req, res) => {
+	console.log('Called !!!')
+	const bearerToken = req.headers.authorization
+	const accessToken = bearerToken?.slice(7)
+
+	try {
+		if (accessToken) {
+			const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string
+			const refreshToken = req.cookies['refreshToken']
+
+			const decoded = jwt.verify(accessToken, ACCESS_TOKEN_SECRET)
+
+			await prisma.user.findFirstOrThrow({
+				where: {
+					id: (decoded as Payload).sub,
+					refresh_token: refreshToken,
+				},
+			})
+
+			await prisma.user.update({
+				where: {
+					id: (decoded as Payload).sub,
+					refresh_token: refreshToken,
+				},
+				data: {
+					refresh_token: null
+				}
+			})
+
+			res.setHeader('Authorization', '')
+
+			res.clearCookie('refreshToken', {
+				httpOnly: true,
+				secure: true,
+				sameSite: 'none',
+				path: '/',
+			})
+
+
+			return res.status(200).json({ message: 'Logged out successfully' })
+		} else {
+			throw new Error()
+		}
+	} catch (err) {
+		return res.status(401).json({ error: 'Something went wrong' })
+	}
+})
+
 export default router
