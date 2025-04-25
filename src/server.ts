@@ -3,8 +3,8 @@ import https from 'https'
 import fs from 'fs'
 import path from 'path'
 
-const key = fs.readFileSync(path.resolve(__dirname, '../server.key'))
-const cert = fs.readFileSync(path.resolve(__dirname, '../server.crt'))
+const key = fs.readFileSync(path.resolve(__dirname, '../key.pem'))
+const cert = fs.readFileSync(path.resolve(__dirname, '../cert.pem'))
 
 const httpsOptions = { key, cert }
 
